@@ -3,7 +3,7 @@
 ![UI Preview](ui/ph.png)
 
 
-## Requirements
+## Dependencies
 [`ox_lib`](https://github.com/overextended/ox_lib)
 
 ## Usage
