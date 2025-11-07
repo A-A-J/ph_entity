@@ -1,45 +1,44 @@
 {
-  "title": "Entity Information",
+  "title": "معلومات الكيان",
   "command": {
     "edebug": {
-      "help": "Toggle entity debug mode (Admin only)"
+      "help": "تبديل وضع تصحيح الكيان (للمسؤول فقط)"
     }
   },
   "notifications": {
-    "activated": "Entity debug mode activated",
-    "deactivated": "Entity debug mode deactivated",
-    "no_permission": "You don't have permission to use this command"
+    "activated": "تم تفعيل وضع تصحيح الكيان",
+    "deactivated": "تم إلغاء تفعيل وضع تصحيح الكيان",
+    "no_permission": "ليس لديك الإذن لاستخدام هذا الأمر"
   },
   "ui": {
-    "entity": "ENTITY",
-    "type": "TYPE",
-    "network_id": "NETWORK ID",
-    "model_hash": "MODEL HASH",
-    "coordinates": "COORDINATES",
-    "rotation": "ROTATION",
-    "heading": "HEADING",
-    "speed": "SPEED",
-    "health": "HEALTH",
-    "plate": "PLATE",
-    "class": "CLASS",
-    "doors": "DOORS",
-    "seats": "SEATS",
-    "passengers": "PASSENGERS",
-    "extras": "EXTRAS",
-    "livery": "LIVERY",
-    "body_health": "BODY HEALTH",
-    "engine_health": "ENGINE HEALTH",
-    "fuel_level": "FUEL LEVEL",
-    "is_player": "IS PLAYER",
-    "player_id": "PLAYER ID",
-    "armour": "ARMOUR",
+    "entity": "الكيان",
+    "type": "النوع",
+    "network_id": "معرّف الشبكة",
+    "model_hash": "تجزئة النموذج",
+    "coordinates": "الإحداثيات",
+    "rotation": "الدوران",
+    "heading": "الاتجاه",
+    "speed": "السرعة",
+    "health": "الصحة",
+    "plate": "اللوحة",
+    "class": "الفئة",
+    "doors": "الأبواب",
+    "seats": "المقاعد",
+    "passengers": "الركاب",
+    "extras": "الإضافات",
+    "livery": "الهيكل الخارجي",
+    "body_health": "صحة الهيكل",
+    "engine_health": "صحة المحرك",
+    "fuel_level": "مستوى الوقود",
+    "is_player": "هل هو لاعب",
+    "player_id": "معرّف اللاعب",
+    "armour": "الدروع",
     "actions": {
-      "copy_model": "Copy model hash",
-      "copy_coords": "Copy coordinates",
-      "copy_rotation": "Copy rotation",
-      "copy_heading": "Copy heading",
-      "copy_all": "Copy all info"
+      "copy_model": "نسخ تجزئة النموذج",
+      "copy_coords": "نسخ الإحداثيات",
+      "copy_rotation": "نسخ الدوران",
+      "copy_heading": "نسخ الاتجاه",
+      "copy_all": "نسخ كل المعلومات"
     }
   }
 }
-
