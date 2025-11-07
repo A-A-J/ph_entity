@@ -1,0 +1,45 @@
+{
+  "title": "Entity Information",
+  "command": {
+    "edebug": {
+      "help": "Toggle entity debug mode (Admin only)"
+    }
+  },
+  "notifications": {
+    "activated": "Entity debug mode activated",
+    "deactivated": "Entity debug mode deactivated",
+    "no_permission": "You don't have permission to use this command"
+  },
+  "ui": {
+    "entity": "ENTITY",
+    "type": "TYPE",
+    "network_id": "NETWORK ID",
+    "model_hash": "MODEL HASH",
+    "coordinates": "COORDINATES",
+    "rotation": "ROTATION",
+    "heading": "HEADING",
+    "speed": "SPEED",
+    "health": "HEALTH",
+    "plate": "PLATE",
+    "class": "CLASS",
+    "doors": "DOORS",
+    "seats": "SEATS",
+    "passengers": "PASSENGERS",
+    "extras": "EXTRAS",
+    "livery": "LIVERY",
+    "body_health": "BODY HEALTH",
+    "engine_health": "ENGINE HEALTH",
+    "fuel_level": "FUEL LEVEL",
+    "is_player": "IS PLAYER",
+    "player_id": "PLAYER ID",
+    "armour": "ARMOUR",
+    "actions": {
+      "copy_model": "Copy model hash",
+      "copy_coords": "Copy coordinates",
+      "copy_rotation": "Copy rotation",
+      "copy_heading": "Copy heading",
+      "copy_all": "Copy all info"
+    }
+  }
+}
+

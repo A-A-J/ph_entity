@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entity Information</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .entity-info-container {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+
+        .entity-info-container.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .entity-box {
+            background: rgba(15, 15, 15, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            min-width: 380px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transform: perspective(1000px) rotateY(-2deg);
+        }
+
+        .entity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .entity-title {
+            color: #ff0000;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .active-badge {
+            background: #4CAF50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .entity-content {
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .info-label {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 400;
+            text-align: left;
+            direction: ltr;
+        }
+
+        .entity-actions {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .action-column {
+            flex: 1;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .action-key {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        .action-text {
+            color: #cccccc;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div id="entityInfo" class="entity-info-container hidden">
+        <div class="entity-box">
+            <div class="entity-header">
+                <h1 class="entity-title" id="entityTitle">ENTITY INFORMATION</h1>
+                <div class="active-badge">ACTIVE</div>
+            </div>
+            
+            <div class="entity-content">
+                <div class="info-row">
+                    <span class="info-label">ENTITY:</span>
+                    <span class="info-value" id="entityHandle">-</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">TYPE:</span>
+                    <span class="info-value" id="entityType">-</span>
+                </div>
+                
+                <div class="info-row" id="networkIdRow" style="display: none;">
+                    <span class="info-label">NETWORK ID:</span>
+                    <span class="info-value" id="networkId">-</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">MODEL HASH:</span>
+                    <span class="info-value" id="modelHash">-</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">COORDINATES:</span>
+                    <span class="info-value" id="coordinates">-</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">ROTATION:</span>
+                    <span class="info-value" id="rotation">-</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">HEADING:</span>
+                    <span class="info-value" id="heading">-</span>
+                </div>
+                
+                <div class="info-row" id="speedRow" style="display: none;">
+                    <span class="info-label">SPEED:</span>
+                    <span class="info-value" id="speed">-</span>
+                </div>
+                
+                <div class="info-row" id="healthRow" style="display: none;">
+                    <span class="info-label">HEALTH:</span>
+                    <span class="info-value" id="health">-</span>
+                </div>
+                
+                <!-- Vehicle specific info -->
+                <div id="vehicleInfo" style="display: none;">
+                    <div class="info-row">
+                        <span class="info-label">PLATE:</span>
+                        <span class="info-value" id="plate">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">CLASS:</span>
+                        <span class="info-value" id="vehicleClassName">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">DOORS:</span>
+                        <span class="info-value" id="numDoors">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">SEATS:</span>
+                        <span class="info-value" id="numSeats">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">PASSENGERS:</span>
+                        <span class="info-value" id="passengers">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">EXTRAS:</span>
+                        <span class="info-value" id="extras">-</span>
+                    </div>
+                    <div class="info-row" id="liveryRow" style="display: none;">
+                        <span class="info-label">LIVERY:</span>
+                        <span class="info-value" id="livery">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">BODY HEALTH:</span>
+                        <span class="info-value" id="bodyHealth">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">ENGINE HEALTH:</span>
+                        <span class="info-value" id="engineHealth">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">FUEL LEVEL:</span>
+                        <span class="info-value" id="fuelLevel">-</span>
+                    </div>
+                </div>
+                
+                <!-- Ped specific info -->
+                <div id="pedInfo" style="display: none;">
+                    <div class="info-row">
+                        <span class="info-label">IS PLAYER:</span>
+                        <span class="info-value" id="isPlayer">-</span>
+                    </div>
+                    <div class="info-row" id="playerIdRow" style="display: none;">
+                        <span class="info-label">PLAYER ID:</span>
+                        <span class="info-value" id="playerId">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">ARMOUR:</span>
+                        <span class="info-value" id="armour">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="entity-actions">
+                <div class="action-column">
+                    <div class="action-item">
+                        <span class="action-key">G</span>
+                        <span class="action-text">Copy model hash</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-key">E</span>
+                        <span class="action-text">Copy coordinates</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-key">R</span>
+                        <span class="action-text">Copy rotation</span>
+                    </div>
+                </div>
+                <div class="action-column">
+                    <div class="action-item">
+                        <span class="action-key">J</span>
+                        <span class="action-text">Copy heading</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-key">Z</span>
+                        <span class="action-text">Copy all info</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let entityData = null;
+        let localeData = {};
+
+        window.addEventListener('message', function(event) {
+            const data = event.data;
+            
+            if (data.action === 'showEntityInfo') {
+                entityData = data.entityInfo;
+                if (data.locale) {
+                    localeData = data.locale;
+                    updateLabels();
+                }
+                updateUI(data.entityInfo);
+                document.getElementById('entityInfo').classList.remove('hidden');
+            } else if (data.action === 'hideEntityInfo') {
+                document.getElementById('entityInfo').classList.add('hidden');
+                entityData = null;
+            }
+        });
+
+        function updateLabels() {
+            if (!localeData || Object.keys(localeData).length === 0) return;
+            
+            // Update title
+            if (localeData.title) {
+                const titleEl = document.getElementById('entityTitle');
+                if (titleEl) titleEl.textContent = localeData.title.toUpperCase();
+            }
+            
+            // Update all labels by finding the corresponding value element
+            const labelMap = {
+                'entityHandle': localeData.entity,
+                'entityType': localeData.type,
+                'networkId': localeData.network_id,
+                'modelHash': localeData.model_hash,
+                'coordinates': localeData.coordinates,
+                'rotation': localeData.rotation,
+                'heading': localeData.heading,
+                'speed': localeData.speed,
+                'health': localeData.health,
+                'plate': localeData.plate,
+                'vehicleClassName': localeData.class,
+                'numDoors': localeData.doors,
+                'numSeats': localeData.seats,
+                'passengers': localeData.passengers,
+                'extras': localeData.extras,
+                'livery': localeData.livery,
+                'bodyHealth': localeData.body_health,
+                'engineHealth': localeData.engine_health,
+                'fuelLevel': localeData.fuel_level,
+                'isPlayer': localeData.is_player,
+                'playerId': localeData.player_id,
+                'armour': localeData.armour
+            };
+            
+            // Update label text by finding the label before each value element
+            Object.keys(labelMap).forEach(valueId => {
+                const valueEl = document.getElementById(valueId);
+                if (valueEl && labelMap[valueId]) {
+                    const labelEl = valueEl.previousElementSibling;
+                    if (labelEl && labelEl.classList.contains('info-label')) {
+                        labelEl.textContent = labelMap[valueId] + ':';
+                    }
+                }
+            });
+            
+            // Update action labels
+            if (localeData.actions) {
+                const actionItems = document.querySelectorAll('.action-item');
+                const actions = [
+                    localeData.actions.copy_model,
+                    localeData.actions.copy_coords,
+                    localeData.actions.copy_rotation,
+                    localeData.actions.copy_heading,
+                    localeData.actions.copy_all
+                ];
+                actionItems.forEach((item, index) => {
+                    const textEl = item.querySelector('.action-text');
+                    if (textEl && actions[index]) {
+                        textEl.textContent = actions[index];
+                    }
+                });
+            }
+        }
+
+        function updateUI(info) {
+            if (!info) return;
+
+            document.getElementById('entityHandle').textContent = info.handle || '-';
+            document.getElementById('entityType').textContent = info.type || '-';
+            document.getElementById('modelHash').textContent = info.model || '-';
+            document.getElementById('coordinates').textContent = info.coords ? `vector3(${info.coords.x.toFixed(2)}, ${info.coords.y.toFixed(2)}, ${info.coords.z.toFixed(2)})` : '-';
+            document.getElementById('rotation').textContent = info.rotation ? `vector3(${info.rotation.x.toFixed(2)}, ${info.rotation.y.toFixed(2)}, ${info.rotation.z.toFixed(2)})` : '-';
+            document.getElementById('heading').textContent = info.heading ? info.heading.toFixed(2) : '-';
+
+            // Show/hide speed and health
+            if (info.speed !== undefined) {
+                document.getElementById('speedRow').style.display = 'flex';
+                document.getElementById('speed').textContent = `${info.speed.toFixed(2)} km/h`;
+            } else {
+                document.getElementById('speedRow').style.display = 'none';
+            }
+
+            if (info.health !== undefined && info.maxHealth !== undefined) {
+                document.getElementById('healthRow').style.display = 'flex';
+                document.getElementById('health').textContent = `${info.health} / ${info.maxHealth}`;
+            } else {
+                document.getElementById('healthRow').style.display = 'none';
+            }
+
+            // Vehicle info
+            if (info.type === 'Vehicle') {
+                document.getElementById('vehicleInfo').style.display = 'block';
+                document.getElementById('pedInfo').style.display = 'none';
+                document.getElementById('plate').textContent = info.plate || '-';
+                document.getElementById('vehicleClassName').textContent = info.vehicleClassName || (info.vehicleClass !== undefined ? `Class ${info.vehicleClass}` : '-');
+                document.getElementById('numDoors').textContent = info.numDoors !== undefined ? info.numDoors : '-';
+                document.getElementById('numSeats').textContent = info.numSeats !== undefined ? info.numSeats : '-';
+                document.getElementById('passengers').textContent = info.passengerCount !== undefined && info.maxPassengers !== undefined 
+                    ? `${info.passengerCount} / ${info.maxPassengers}` 
+                    : '-';
+                document.getElementById('extras').textContent = info.extrasCount !== undefined && info.enabledExtras !== undefined
+                    ? `${info.enabledExtras} / ${info.extrasCount}`
+                    : '-';
+                
+                // Livery info
+                if (info.livery !== undefined && info.livery >= 0 && info.liveryCount > 0) {
+                    document.getElementById('liveryRow').style.display = 'flex';
+                    let liveryText = `${info.livery}`;
+                    if (info.liveryName && info.liveryName !== 'NULL' && info.liveryName !== '') {
+                        liveryText += ` (${info.liveryName})`;
+                    }
+                    if (info.liveryCount > 0) {
+                        liveryText += ` / ${info.liveryCount}`;
+                    }
+                    document.getElementById('livery').textContent = liveryText;
+                } else {
+                    document.getElementById('liveryRow').style.display = 'none';
+                }
+                
+                document.getElementById('bodyHealth').textContent = info.bodyHealth ? info.bodyHealth.toFixed(1) : '-';
+                document.getElementById('engineHealth').textContent = info.engineHealth ? info.engineHealth.toFixed(1) : '-';
+                document.getElementById('fuelLevel').textContent = info.fuelLevel ? info.fuelLevel.toFixed(1) : '-';
+            } else {
+                document.getElementById('vehicleInfo').style.display = 'none';
+            }
+
+            // Ped info
+            if (info.type === 'Ped') {
+                document.getElementById('pedInfo').style.display = 'block';
+                document.getElementById('isPlayer').textContent = info.isPlayer ? 'Yes' : 'No';
+                document.getElementById('armour').textContent = info.armour !== undefined ? info.armour : '-';
+                
+                if (info.playerId) {
+                    document.getElementById('playerIdRow').style.display = 'flex';
+                    document.getElementById('networkIdRow').style.display = 'flex';
+                    document.getElementById('networkId').textContent = info.playerId;
+                    document.getElementById('playerId').textContent = info.playerId;
+                } else {
+                    document.getElementById('playerIdRow').style.display = 'none';
+                }
+                
+                // Network ID is already handled above for all entity types
+            } else {
+                document.getElementById('pedInfo').style.display = 'none';
+            }
+        }
+
+        // Listen for toggle display message from client
+        window.addEventListener('message', function(event) {
+            const data = event.data;
+            
+            if (data.action === 'toggleDisplay') {
+                document.getElementById('entityInfo').classList.toggle('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
