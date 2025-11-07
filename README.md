@@ -12,4 +12,4 @@
 ```
 
 ## Support
-Join: [Discord](https://discord.gg/FsvMYa2zcT)
+Join: [Discord](https://discord.gg/FsvMYa2zcT) 
